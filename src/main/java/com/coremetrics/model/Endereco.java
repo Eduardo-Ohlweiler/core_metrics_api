@@ -1,7 +1,6 @@
 package com.coremetrics.model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,13 +15,11 @@ import jakarta.persistence.Table;
 @Table(name = "endereco")
 public class Endereco implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 150)
+    @Column(length = 150, nullable = false)
     private String rua;
 
     @Column(length = 100)
@@ -50,8 +47,7 @@ public class Endereco implements Serializable {
     @ManyToOne
     @JoinColumn(name = "tipo_endereco_id", nullable = false)
     private TipoEndereco tipoEndereco;
-
-    // Getters e Setters
+    
     public Integer getId() {
         return id;
     }
@@ -131,28 +127,4 @@ public class Endereco implements Serializable {
     public void setTipoEndereco(TipoEndereco tipoEndereco) {
         this.tipoEndereco = tipoEndereco;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Endereco other = (Endereco) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 23 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    
 }

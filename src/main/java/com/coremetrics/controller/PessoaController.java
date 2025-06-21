@@ -1,8 +1,6 @@
 package com.coremetrics.controller;
 
-import java.util.List;
-import java.util.Optional;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,49 +16,37 @@ import com.coremetrics.service.PessoaService;
 @RequestMapping("/pessoas")
 public class PessoaController {
 
-    private final PessoaService pessoaService;
+    @Autowired
+    private PessoaService pessoaService;
 
-    public PessoaController(PessoaService pessoaService) {
-        this.pessoaService = pessoaService;
-    }
-
-    // LISTAR TODOS
-    @GetMapping
-    public String listarPessoas(Model model) {
-        List<Pessoa> pessoas = pessoaService.findAll();
-        model.addAttribute("pessoas", pessoas);
-        return "pessoas/list";
-    }
-
-    // EXIBIR FORM DE CADASTRO NOVO
+    // Mostrar formulário para nova pessoa
     @GetMapping("/novo")
-    public String exibirFormularioCadastro(Model model) {
+    public String novaPessoa(Model model) {
         model.addAttribute("pessoa", new Pessoa());
-        return "pessoas/form";
+        return "pessoa/form"; // Formulário para criar pessoa
     }
 
-    // SALVAR NOVO OU EDITAR
+    // Salvar pessoa (novo ou edição)
     @PostMapping("/salvar")
     public String salvarPessoa(@ModelAttribute Pessoa pessoa) {
         pessoaService.save(pessoa);
         return "redirect:/pessoas";
     }
 
-    // EXIBIR FORM DE EDIÇÃO
+    // Editar pessoa - carrega a pessoa e mostra formulário
     @GetMapping("/editar/{id}")
-    public String exibirFormularioEdicao(@PathVariable Integer id, Model model) {
-        Optional<Pessoa> pessoaOpt = pessoaService.findById(id);
-        if (pessoaOpt.isPresent()) {
-            model.addAttribute("pessoa", pessoaOpt.get());
-            return "pessoas/form";
-        } else {
-            return "redirect:/pessoas";
+    public String editarPessoa(@PathVariable Integer id, Model model) {
+        Pessoa pessoa = pessoaService.findById(id);
+        if (pessoa == null) {
+            return "redirect:/pessoas?erro=naoEncontrado";
         }
+        model.addAttribute("pessoa", pessoa);
+        return "pessoa/form"; // Formulário para edição
     }
 
-    // DELETAR
-    @GetMapping("/deletar/{id}")
-    public String deletarPessoa(@PathVariable Integer id) {
+    // Excluir pessoa
+    @GetMapping("/excluir/{id}")
+    public String excluirPessoa(@PathVariable Integer id) {
         pessoaService.deleteById(id);
         return "redirect:/pessoas";
     }

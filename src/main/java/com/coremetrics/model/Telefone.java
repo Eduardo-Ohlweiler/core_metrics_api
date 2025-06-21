@@ -1,21 +1,25 @@
 package com.coremetrics.model;
 
-import jakarta.persistence.*;
-
 import java.io.Serializable;
-import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "telefone")
 public class Telefone implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20, nullable = false)
     private String numero;
 
     @ManyToOne
@@ -25,9 +29,7 @@ public class Telefone implements Serializable {
     @ManyToOne
     @JoinColumn(name = "tipo_telefone_id", nullable = false)
     private TipoTelefone tipoTelefone;
-
-    // Getters e Setters
-
+    
     public Integer getId() {
         return id;
     }
@@ -59,28 +61,4 @@ public class Telefone implements Serializable {
     public void setTipoTelefone(TipoTelefone tipoTelefone) {
         this.tipoTelefone = tipoTelefone;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 11 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Telefone other = (Telefone) obj;
-        return Objects.equals(this.id, other.id);
-    }
-
-    
 }

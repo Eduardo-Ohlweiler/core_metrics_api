@@ -21,8 +21,8 @@ public class PessoaService {
         return pessoaRepository.findAll();
     }
 
-    public Optional<Pessoa> findById(Integer id) {
-        return pessoaRepository.findById(id);
+    public Pessoa findById(Integer id) {
+        return pessoaRepository.findById(id).orElse(null);
     }
 
     public Optional<Pessoa> findByCpf(String cpf) {
