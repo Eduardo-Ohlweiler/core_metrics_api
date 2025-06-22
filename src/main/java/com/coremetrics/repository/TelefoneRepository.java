@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.coremetrics.model.Telefone;
+import com.coremetrics.model.Usuario;
 
 @Repository
 public interface TelefoneRepository extends JpaRepository<Telefone, Integer> {
-    List<Telefone> findByPessoaId(Integer pessoaId);
+
+    List<Telefone> findByPessoaIdAndUsuario(Integer pessoaId, Usuario usuario);
 }
