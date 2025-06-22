@@ -14,7 +14,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario buscarPorLogin(String login) {
+    public Usuario findByLogin(String login) {
         return usuarioRepository.findByLogin(login);
     }
 

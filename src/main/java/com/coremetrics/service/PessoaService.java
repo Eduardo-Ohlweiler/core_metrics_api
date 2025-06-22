@@ -1,11 +1,11 @@
 package com.coremetrics.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.coremetrics.model.Pessoa;
+import com.coremetrics.model.Usuario;
 import com.coremetrics.repository.PessoaRepository;
 
 @Service
@@ -17,16 +17,16 @@ public class PessoaService {
         this.pessoaRepository = pessoaRepository;
     }
 
-    public List<Pessoa> findAll() {
-        return pessoaRepository.findAll();
+    public Pessoa findById(Integer id, Usuario usuario) {
+        return pessoaRepository.findByIdAndUsuario(id, usuario);
     }
 
-    public Pessoa findById(Integer id) {
-        return pessoaRepository.findById(id).orElse(null);
+    public Pessoa findByCpf(String cpf, Usuario usuario) {
+        return pessoaRepository.findByCpfAndUsuario(cpf, usuario);
     }
 
-    public Optional<Pessoa> findByCpf(String cpf) {
-        return pessoaRepository.findByCpf(cpf);
+    public List<Pessoa> findByNome(String nome, Usuario usuario) {
+        return pessoaRepository.findByNomeContainingIgnoreCaseAndUsuario(nome, usuario);
     }
 
     public Pessoa save(Pessoa pessoa) {

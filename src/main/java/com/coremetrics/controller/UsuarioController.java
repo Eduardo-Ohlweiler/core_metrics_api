@@ -26,7 +26,7 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public String processarLogin(@ModelAttribute Usuario usuario, HttpSession session, Model model) {
-        Usuario usuarioBanco = usuarioService.buscarPorLogin(usuario.getLogin());
+        Usuario usuarioBanco = usuarioService.findByLogin(usuario.getLogin());
 
         if (usuarioBanco != null && usuarioBanco.getSenha().equals(usuario.getSenha())) {
             session.setAttribute("usuarioLogado", usuarioBanco);

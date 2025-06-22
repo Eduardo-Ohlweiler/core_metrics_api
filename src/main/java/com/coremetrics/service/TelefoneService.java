@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.coremetrics.model.Telefone;
+import com.coremetrics.model.Usuario;
 import com.coremetrics.repository.TelefoneRepository;
 
 @Service
@@ -16,12 +17,8 @@ public class TelefoneService {
         this.telefoneRepository = telefoneRepository;
     }
 
-    public List<Telefone> findAll() {
-        return telefoneRepository.findAll();
-    }
-
-    public Telefone findById(Integer id) {
-        return telefoneRepository.findById(id).orElse(null);
+    public List<Telefone> findByPessoaAndUsuario(Integer pessoaId, Usuario usuario) {
+        return telefoneRepository.findByPessoaIdAndUsuarioId(pessoaId, usuario.getId());
     }
 
     public Telefone save(Telefone telefone) {
