@@ -15,6 +15,8 @@ import jakarta.persistence.Table;
 @Table(name = "endereco")
 public class Endereco implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -47,7 +49,29 @@ public class Endereco implements Serializable {
     @ManyToOne
     @JoinColumn(name = "tipo_endereco_id", nullable = false)
     private TipoEndereco tipoEndereco;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
+    public Endereco() {
+    }
+
+    public Endereco(String rua, String bairro, String cidade, String estado, String cep,
+                    String numero, String complemento, Pessoa pessoa, TipoEndereco tipoEndereco,
+                    Usuario usuario) {
+        this.rua = rua;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.pessoa = pessoa;
+        this.tipoEndereco = tipoEndereco;
+        this.usuario = usuario;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -126,5 +150,26 @@ public class Endereco implements Serializable {
 
     public void setTipoEndereco(TipoEndereco tipoEndereco) {
         this.tipoEndereco = tipoEndereco;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Endereco)) return false;
+        Endereco other = (Endereco) o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }

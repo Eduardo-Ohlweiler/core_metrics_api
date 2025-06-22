@@ -9,6 +9,7 @@ import java.util.Objects;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +22,8 @@ import jakarta.persistence.Table;
 @Table(name = "pessoa")
 public class Pessoa implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,6 +31,7 @@ public class Pessoa implements Serializable {
     @Column(length = 150, nullable = false)
     private String nome;
 
+    @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
     @Column(length = 14, unique = true)
@@ -36,15 +40,22 @@ public class Pessoa implements Serializable {
     @Column(length = 100, unique = true)
     private String email;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_pessoa_id", nullable = false)
     private TipoPessoa tipoPessoa;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Telefone> telefones = new ArrayList<>();
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Endereco> enderecos = new ArrayList<>();
+
+    public Pessoa() {
+    }
     
     public Integer getId() {
         return id;
@@ -94,6 +105,14 @@ public class Pessoa implements Serializable {
         this.tipoPessoa = tipoPessoa;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     public List<Telefone> getTelefones() {
         return telefones;
     }
@@ -108,10 +127,8 @@ public class Pessoa implements Serializable {
 
     public void setEnderecos(List<Endereco> enderecos) {
         this.enderecos = enderecos;
-    }    
+    }
 
-    
-    // Helpers para adicionar/remover telefone e endereço, pra facilitar no controller
     public void addTelefone(Telefone telefone) {
         telefones.add(telefone);
         telefone.setPessoa(this);
@@ -134,23 +151,21 @@ public class Pessoa implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        return hash;
+        return Objects.hashCode(this.id);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        if (this == obj)
             return true;
-        }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass())
             return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Pessoa other = (Pessoa) obj;
+        Pessoa other = (Pessoa) obj;
         return Objects.equals(this.id, other.id);
+    }
+
+    @Override
+    public String toString() {
+        return "Pessoa{id=" + id + ", nome=" + nome + "}";
     }
 }

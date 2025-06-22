@@ -15,6 +15,8 @@ import jakarta.persistence.Table;
 @Table(name = "telefone")
 public class Telefone implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,7 +31,11 @@ public class Telefone implements Serializable {
     @ManyToOne
     @JoinColumn(name = "tipo_telefone_id", nullable = false)
     private TipoTelefone tipoTelefone;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     public Integer getId() {
         return id;
     }
@@ -60,5 +66,13 @@ public class Telefone implements Serializable {
 
     public void setTipoTelefone(TipoTelefone tipoTelefone) {
         this.tipoTelefone = tipoTelefone;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
