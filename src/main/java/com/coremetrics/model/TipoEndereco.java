@@ -1,6 +1,7 @@
 package com.coremetrics.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,9 +25,11 @@ public class TipoEndereco implements Serializable {
     @Column(length = 50, nullable = false, unique = true)
     private String descricao;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    public TipoEndereco() {}
 
     public Integer getId() {
         return id;
@@ -50,5 +53,21 @@ public class TipoEndereco implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        final TipoEndereco other = (TipoEndereco) obj;
+        return Objects.equals(this.id, other.id);
     }
 }

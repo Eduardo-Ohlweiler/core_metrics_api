@@ -1,6 +1,7 @@
 package com.coremetrics.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,8 +25,8 @@ public class TipoTelefone implements Serializable {
     @Column(length = 50, nullable = false, unique = true)
     private String descricao;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     public TipoTelefone() {}
@@ -52,5 +53,21 @@ public class TipoTelefone implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        final TipoTelefone other = (TipoTelefone) obj;
+        return Objects.equals(this.id, other.id);
     }
 }

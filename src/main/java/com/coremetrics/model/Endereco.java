@@ -1,6 +1,7 @@
 package com.coremetrics.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,35 +43,19 @@ public class Endereco implements Serializable {
     @Column(length = 100)
     private String complemento;
 
-    @ManyToOne
-    @JoinColumn(name = "pessoa_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "pessoa_id")
     private Pessoa pessoa;
 
-    @ManyToOne
-    @JoinColumn(name = "tipo_endereco_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "tipo_endereco_id")
     private TipoEndereco tipoEndereco;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public Endereco() {
-    }
-
-    public Endereco(String rua, String bairro, String cidade, String estado, String cep,
-                    String numero, String complemento, Pessoa pessoa, TipoEndereco tipoEndereco,
-                    Usuario usuario) {
-        this.rua = rua;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.cep = cep;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.pessoa = pessoa;
-        this.tipoEndereco = tipoEndereco;
-        this.usuario = usuario;
-    }
+    public Endereco() {}
 
     public Integer getId() {
         return id;
@@ -161,15 +146,15 @@ public class Endereco implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Endereco)) return false;
-        Endereco other = (Endereco) o;
-        return id != null && id.equals(other.getId());
+    public int hashCode() {
+        return Objects.hashCode(this.id);
     }
 
     @Override
-    public int hashCode() {
-        return 31;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Endereco other = (Endereco) obj;
+        return Objects.equals(this.id, other.id);
     }
 }

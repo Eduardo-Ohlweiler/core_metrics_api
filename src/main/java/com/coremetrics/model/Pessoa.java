@@ -9,7 +9,6 @@ import java.util.Objects;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,23 +39,32 @@ public class Pessoa implements Serializable {
     @Column(length = 100, unique = true)
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_pessoa_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "tipo_pessoa_id")
     private TipoPessoa tipoPessoa;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Telefone> telefones = new ArrayList<>();
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Endereco> enderecos = new ArrayList<>();
+    private List<Endereco> enderecos = new ArrayList<>();    
 
-    public Pessoa() {
+    public Pessoa() {}
+
+    public Pessoa(Integer id, String nome, LocalDate dataNascimento, String cpf, String email, TipoPessoa tipoPessoa, Usuario usuario) {
+        this.id = id;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.cpf = cpf;
+        this.email = email;
+        this.tipoPessoa = tipoPessoa;
+        this.usuario = usuario;
     }
-    
+
     public Integer getId() {
         return id;
     }
@@ -129,26 +137,6 @@ public class Pessoa implements Serializable {
         this.enderecos = enderecos;
     }
 
-    public void addTelefone(Telefone telefone) {
-        telefones.add(telefone);
-        telefone.setPessoa(this);
-    }
-
-    public void removeTelefone(Telefone telefone) {
-        telefones.remove(telefone);
-        telefone.setPessoa(null);
-    }
-
-    public void addEndereco(Endereco endereco) {
-        enderecos.add(endereco);
-        endereco.setPessoa(this);
-    }
-
-    public void removeEndereco(Endereco endereco) {
-        enderecos.remove(endereco);
-        endereco.setPessoa(null);
-    }
-
     @Override
     public int hashCode() {
         return Objects.hashCode(this.id);
@@ -156,16 +144,9 @@ public class Pessoa implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         Pessoa other = (Pessoa) obj;
         return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString() {
-        return "Pessoa{id=" + id + ", nome=" + nome + "}";
     }
 }
