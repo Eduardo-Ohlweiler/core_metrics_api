@@ -1,13 +1,18 @@
 package com.coremetrics.controller;
 
-import com.coremetrics.model.Usuario;
-import com.coremetrics.security.JwtUtil;
-import com.coremetrics.service.UsuarioService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.coremetrics.model.Usuario;
+import com.coremetrics.security.JwtUtil;
+import com.coremetrics.service.UsuarioService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -39,15 +44,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) {
+        System.out.println(request);
         Usuario usuario = usuarioService.findByLogin(request.login);
         if (usuario == null) {
             return ResponseEntity.status(401).body("Login inválido");
         }
-
+        System.out.println("chagou no controller "+usuario);
         if (!passwordEncoder.matches(request.senha, usuario.getSenha())) {
             return ResponseEntity.status(401).body("Senha inválida");
         }
-
+        System.out.println("passou senha"+usuario);
         // Gera o token JWT
         String token = jwtUtil.gerarToken(usuario.getLogin());
 
