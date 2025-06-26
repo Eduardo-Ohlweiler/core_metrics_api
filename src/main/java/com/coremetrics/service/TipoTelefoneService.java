@@ -16,10 +16,10 @@ public class TipoTelefoneService {
     private TipoTelefoneRepository tipoTelefoneRepository;
 
     @Autowired
-    private UsuarioSessaoService usuarioSessaoService;
+    private UsuarioService usuarioService;  // troquei aqui
 
     public List<TipoTelefone> listar(String descricao) {
-        Usuario usuario = usuarioSessaoService.getUsuarioLogado();
+        Usuario usuario = usuarioService.getUsuarioLogado();
         if (usuario == null) {
             throw new RuntimeException("Usuário não está logado");
         }
@@ -28,7 +28,7 @@ public class TipoTelefoneService {
     }
 
     public TipoTelefone criar(TipoTelefone tipoTelefone) {
-        Usuario usuario = usuarioSessaoService.getUsuarioLogado();
+        Usuario usuario = usuarioService.getUsuarioLogado();
         if (usuario == null) {
             throw new RuntimeException("Usuário não está logado");
         }
@@ -37,7 +37,7 @@ public class TipoTelefoneService {
     }
 
     public TipoTelefone atualizar(Integer id, TipoTelefone dados) {
-        Usuario usuario = usuarioSessaoService.getUsuarioLogado();
+        Usuario usuario = usuarioService.getUsuarioLogado();
         if (usuario == null) {
             throw new RuntimeException("Usuário não está logado");
         }
@@ -53,7 +53,7 @@ public class TipoTelefoneService {
     }
 
     public void deletar(Integer id) {
-        Usuario usuario = usuarioSessaoService.getUsuarioLogado();
+        Usuario usuario = usuarioService.getUsuarioLogado();
         if (usuario == null) {
             throw new RuntimeException("Usuário não está logado");
         }

@@ -34,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Ignora o filtro para a rota de login
         if ("/auth/login".equals(path)) {
+            System.out.println("Ignorando autenticação para /auth/login");
             filterChain.doFilter(request, response);
             return;
         }
@@ -42,17 +43,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+            System.out.println("Token recebido: " + token);
 
             if (jwtUtil.tokenValido(token)) {
                 String login = jwtUtil.extrairLogin(token);
+                System.out.println("Usuário autenticado via token: " + login);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                System.out.println("Token JWT inválido");
             }
+        } else {
+            System.out.println("Header Authorization ausente ou mal formatado");
         }
 
         filterChain.doFilter(request, response);

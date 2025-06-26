@@ -3,6 +3,7 @@ package com.coremetrics.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.coremetrics.model.Usuario;
@@ -32,5 +33,11 @@ public class UsuarioService {
 
     public void deletarPorId(Integer id) {
         usuarioRepository.deleteById(id);
+    }
+
+    public Usuario getUsuarioLogado() {
+        String login = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("Login extraído do SecurityContext: " + login);
+        return findByLogin(login);
     }
 }

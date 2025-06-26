@@ -32,7 +32,6 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-System.out.println("parte de segurança");
         return http.build();
     }
 
